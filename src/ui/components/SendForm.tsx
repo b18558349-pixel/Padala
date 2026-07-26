@@ -93,23 +93,27 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
   }, [resolved, amount, federationInput, memo, onPaymentSent]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5 sm:gap-6">
       {/* Header */}
       <div>
         <div className="flex items-center gap-3 mb-1">
           <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center">
             <Send className="w-5 h-5 text-white" />
           </div>
-          <h2 className="font-heading text-2xl font-bold text-slate-900">Padala</h2>
+          <h2 className="font-heading text-xl sm:text-2xl leading-tight font-bold text-slate-900">
+            Padala
+          </h2>
         </div>
-        <p className="text-slate-500 text-sm ml-13">Pay anyone by @username.</p>
+        <p className="text-slate-500 text-sm leading-5 sm:ml-[52px]">Pay anyone by @username.</p>
       </div>
 
       {/* Sender badge */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-purple-50 border border-purple-200 rounded-xl">
+      <div className="flex items-center gap-2 min-w-0 flex-wrap px-3 py-2 bg-purple-50 border border-purple-200 rounded-xl">
         <User className="w-4 h-4 text-purple-600" />
         <span className="text-sm text-slate-700">Sending as</span>
-        <span className="text-sm font-semibold text-purple-700">{DEMO_SENDER.username}</span>
+        <span className="text-sm font-semibold text-purple-700 min-w-0 truncate">
+          {DEMO_SENDER.username}
+        </span>
       </div>
 
       {/* Federation address input */}
@@ -117,7 +121,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
         <label className="text-sm font-semibold text-slate-700" htmlFor="fed-input">
           Recipient @username
         </label>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <div className="relative flex-1">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">
               @
@@ -140,7 +144,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
             type="button"
             onClick={handleResolve}
             disabled={resolving || !federationInput}
-            className="h-11 px-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white rounded-xl font-semibold text-sm flex items-center gap-2 transition-colors min-w-[90px] justify-center"
+            className="h-11 w-full sm:w-auto px-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white rounded-xl font-semibold text-sm flex items-center gap-2 transition-colors min-w-[90px] justify-center"
           >
             {resolving ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -216,7 +220,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
         </div>
 
         {/* Quick amounts */}
-        <div className="flex gap-2">
+        <div className="grid grid-cols-5 gap-2">
           {['1', '5', '10', '25', '50'].map((v) => (
             <button
               key={v}
@@ -287,7 +291,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
         )}
       </button>
 
-      <p className="text-xs text-slate-400 text-center">
+      <p className="text-xs leading-5 text-slate-400 text-center">
         Powered by Stellar SEP-2 federation · Testnet
       </p>
     </div>

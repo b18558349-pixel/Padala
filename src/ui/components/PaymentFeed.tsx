@@ -169,7 +169,7 @@ export default function PaymentFeed() {
       </div>
 
       {/* Feed list */}
-      <div className="flex-1 overflow-y-auto flex flex-col gap-2">
+      <div className="min-h-0 flex-1 overflow-y-auto flex flex-col gap-2">
         {entries.length === 0 ? (
           <div className="flex flex-col items-center justify-center flex-1 text-center py-12">
             <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center mb-3">
