@@ -16,7 +16,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_APP_NAME: z.string().default('Padala'),
   NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:3003'),
 
-  DRIZZLE_DATABASE_URL: z.string().url(),
+  DRIZZLE_DATABASE_URL: z.string().url().optional(),
 
   STELLAR_NETWORK: z.enum(['testnet', 'public', 'futurenet']).default('testnet'),
   STELLAR_HORIZON_URL: z.string().url().default('https://horizon-testnet.stellar.org'),
@@ -49,5 +49,13 @@ if (!parsed.success) {
   throw new Error('Invalid environment variables');
 }
 
-export const env = parsed.data;
+if (!parsed.data.DEMO_MODE && !parsed.data.DRIZZLE_DATABASE_URL) {
+  throw new Error('DRIZZLE_DATABASE_URL is required outside DEMO_MODE');
+}
+
+export const env = {
+  ...parsed.data,
+  DRIZZLE_DATABASE_URL:
+    parsed.data.DRIZZLE_DATABASE_URL ?? 'postgresql://demo:demo@localhost:5432/padala',
+};
 export type Env = typeof env;

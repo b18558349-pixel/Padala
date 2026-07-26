@@ -1,6 +1,8 @@
 import { and, desc, eq, isNull } from 'drizzle-orm';
+import { env } from '@/server/config/env';
 import { db } from '@/server/db/client';
 import { type Payment, payments } from '@/server/db/schema';
+import { createDemoPayment, demoPayments } from '@/server/demo-data';
 import { minorFromString } from '@/server/lib/bigint';
 import { AppError } from '@/server/lib/http';
 
@@ -26,6 +28,40 @@ export async function createPayment(input: CreatePaymentInput): Promise<Payment>
   const amount = minorFromString(input.amountMinor);
   if (amount <= 0n) {
     throw new AppError('INVALID_INPUT', 'Amount must be greater than 0', 400);
+  }
+
+  if (env.DEMO_MODE) {
+    if (input.idempotencyKey) {
+      const existing = [...demoPayments.values()].find(
+        (payment) => payment.idempotencyKey === input.idempotencyKey,
+      );
+      if (existing) {
+        const sameRequest =
+          existing.senderAddress === input.senderAddress &&
+          existing.recipientAddress === input.recipientAddress &&
+          existing.amountMinor === input.amountMinor &&
+          existing.memo === (input.memo ?? null);
+        if (!sameRequest) {
+          throw new AppError('CONFLICT', 'Idempotency-Key was reused for another payment', 409);
+        }
+        return existing;
+      }
+    }
+
+    return createDemoPayment({
+      senderUsername: input.senderUsername,
+      senderAddress: input.senderAddress,
+      recipientUsername: input.recipientUsername,
+      recipientAddress: input.recipientAddress,
+      amountMinor: input.amountMinor,
+      memo: input.memo ?? null,
+      idempotencyKey: input.idempotencyKey ?? null,
+      unsignedXdr: null,
+      unsignedTxDigest: null,
+      txHash: null,
+      status: 'pending',
+      isNewAccount: false,
+    });
   }
 
   if (input.idempotencyKey) {
@@ -75,6 +111,19 @@ export async function confirmPayment(
   txHash: string,
   isNewAccount = false,
 ): Promise<Payment> {
+  if (env.DEMO_MODE) {
+    const existing = await getPaymentById(id);
+    const updated: Payment = {
+      ...existing,
+      status: 'confirmed',
+      txHash,
+      isNewAccount,
+      updatedAt: new Date(),
+    };
+    demoPayments.set(id, updated);
+    return updated;
+  }
+
   const [updated] = await db
     .update(payments)
     .set({
@@ -97,6 +146,24 @@ export async function attachPreparedPayment(
   unsignedXdr: string,
   unsignedTxDigest: string,
 ): Promise<Payment> {
+  if (env.DEMO_MODE) {
+    const existing = await getPaymentById(id);
+    if (existing.status === 'pending' && !existing.unsignedXdr) {
+      const updated: Payment = {
+        ...existing,
+        unsignedXdr,
+        unsignedTxDigest,
+        updatedAt: new Date(),
+      };
+      demoPayments.set(id, updated);
+      return updated;
+    }
+    if (existing.unsignedXdr === unsignedXdr && existing.unsignedTxDigest === unsignedTxDigest) {
+      return existing;
+    }
+    throw new AppError('CONFLICT', 'Payment intent was prepared concurrently', 409);
+  }
+
   const [updated] = await db
     .update(payments)
     .set({ unsignedXdr, unsignedTxDigest, updatedAt: new Date() })
@@ -119,6 +186,12 @@ export async function confirmPreparedPayment(id: string, txHash: string): Promis
   if (!existing.unsignedTxDigest) {
     throw new AppError('CONFLICT', 'Payment has not been prepared', 409);
   }
+  if (env.DEMO_MODE) {
+    const updated: Payment = { ...existing, status: 'confirmed', txHash, updatedAt: new Date() };
+    demoPayments.set(id, updated);
+    return updated;
+  }
+
   const [updated] = await db
     .update(payments)
     .set({ status: 'confirmed', txHash, updatedAt: new Date() })
@@ -132,6 +205,13 @@ export async function confirmPreparedPayment(id: string, txHash: string): Promis
  * Mark a payment as failed.
  */
 export async function failPayment(id: string): Promise<Payment> {
+  if (env.DEMO_MODE) {
+    const existing = await getPaymentById(id);
+    const updated: Payment = { ...existing, status: 'failed', updatedAt: new Date() };
+    demoPayments.set(id, updated);
+    return updated;
+  }
+
   const [updated] = await db
     .update(payments)
     .set({
@@ -151,6 +231,12 @@ export async function failPayment(id: string): Promise<Payment> {
  * Get recent payments (last 50).
  */
 export async function getRecentPayments(limit = 50): Promise<Payment[]> {
+  if (env.DEMO_MODE) {
+    return [...demoPayments.values()]
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, limit);
+  }
+
   return db.select().from(payments).orderBy(desc(payments.createdAt)).limit(limit);
 }
 
@@ -158,6 +244,12 @@ export async function getRecentPayments(limit = 50): Promise<Payment[]> {
  * Get a single payment by ID.
  */
 export async function getPaymentById(id: string): Promise<Payment> {
+  if (env.DEMO_MODE) {
+    const payment = demoPayments.get(id);
+    if (!payment) throw new AppError('NOT_FOUND', 'Payment not found', 404);
+    return payment;
+  }
+
   const payment = await db.query.payments.findFirst({
     where: eq(payments.id, id),
   });
