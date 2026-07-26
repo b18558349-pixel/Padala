@@ -1,16 +1,11 @@
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { ok, created, fromError, fail } from '@/server/lib/http';
-import {
-  createPayment,
-  confirmPayment,
-  failPayment,
-  getRecentPayments,
-} from '@/server/service/payment.service';
-import { resolveFederation } from '@/server/service/federation.service';
-import { demoSimulatePayment } from '@/server/lib/stellar';
 import { humanToMinor } from '@/server/lib/bigint';
-import { paymentEventBus, type PaymentEvent } from '@/server/lib/eventBus';
+import { type PaymentEvent, paymentEventBus } from '@/server/lib/eventBus';
+import { created, fail, fromError, ok } from '@/server/lib/http';
+import { demoSimulatePayment } from '@/server/lib/stellar';
+import { resolveFederation } from '@/server/service/federation.service';
+import { confirmPayment, createPayment, getRecentPayments } from '@/server/service/payment.service';
 
 const sendSchema = z.object({
   senderUsername: z.string().min(1).max(64),
@@ -38,7 +33,11 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     if (process.env.DEMO_MODE !== 'true' || process.env.STELLAR_NETWORK === 'public') {
-      return fail('CONFLICT', 'Payment route requires an external signer and Horizon proof outside demo mode', 409);
+      return fail(
+        'CONFLICT',
+        'Payment route requires an external signer and Horizon proof outside demo mode',
+        409,
+      );
     }
     const body = await req.json();
     const parsed = sendSchema.safeParse(body);

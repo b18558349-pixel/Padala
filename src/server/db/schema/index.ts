@@ -1,2 +1,2 @@
-export * from './payments';
 export * from './federationUsers';
+export * from './payments';

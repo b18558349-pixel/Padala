@@ -1,10 +1,10 @@
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { created, fail, fromError } from '@/server/lib/http';
 import { humanToMinor } from '@/server/lib/bigint';
+import { created, fail, fromError } from '@/server/lib/http';
 import { buildUnsignedPayment, validateStellarAddress } from '@/server/lib/stellar';
-import { attachPreparedPayment, createPayment } from '@/server/service/payment.service';
 import { resolveFederation } from '@/server/service/federation.service';
+import { attachPreparedPayment, createPayment } from '@/server/service/payment.service';
 
 const schema = z.object({
   senderUsername: z.string().min(1).max(64),

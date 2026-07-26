@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
 const booleanEnv = z.preprocess(
-  (value) => (value === undefined ? false : typeof value === 'string' ? value === 'true' || value === '1' : value),
+  (value) =>
+    value === undefined
+      ? false
+      : typeof value === 'string'
+        ? value === 'true' || value === '1'
+        : value,
   z.boolean(),
 );
 

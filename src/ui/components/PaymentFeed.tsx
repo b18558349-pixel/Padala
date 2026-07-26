@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { CheckCircle, XCircle, Clock, Zap, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle, Clock, Sparkles, XCircle, Zap } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Payment } from '@/server/db/schema';
 
 type FeedEntry = {
@@ -124,7 +124,8 @@ export default function PaymentFeed() {
             amountMinor: p.amountMinor,
             txHash: p.txHash,
             status: p.status,
-            createdAt: typeof p.createdAt === 'string' ? p.createdAt : new Date(p.createdAt).toISOString(),
+            createdAt:
+              typeof p.createdAt === 'string' ? p.createdAt : new Date(p.createdAt).toISOString(),
             isNewAccount: p.isNewAccount,
           })),
         );
@@ -212,7 +213,17 @@ export default function PaymentFeed() {
 // Need to import Send for empty state — add it
 function Send(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       <path d="m22 2-7 20-4-9-9-4Z" />
       <path d="M22 2 11 13" />
     </svg>

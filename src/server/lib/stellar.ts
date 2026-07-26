@@ -1,13 +1,13 @@
 import {
-  Keypair,
-  Networks,
-  TransactionBuilder,
-  Operation,
   Asset,
-  Memo,
   BASE_FEE,
+  Horizon,
+  Keypair,
+  Memo,
+  Networks,
+  Operation,
+  TransactionBuilder,
 } from '@stellar/stellar-sdk';
-import { Horizon } from '@stellar/stellar-sdk';
 import { env } from '@/server/config/env';
 import { AppError } from './http';
 
@@ -22,9 +22,8 @@ export function getNetworkPassphrase(): string {
 }
 
 export function getUsdcAsset(): Asset {
-  const issuer = env.STELLAR_NETWORK === 'public'
-    ? env.USDC_ASSET_ISSUER_PUBLIC
-    : env.USDC_ASSET_ISSUER_TESTNET;
+  const issuer =
+    env.STELLAR_NETWORK === 'public' ? env.USDC_ASSET_ISSUER_PUBLIC : env.USDC_ASSET_ISSUER_TESTNET;
   return new Asset(env.USDC_ASSET_CODE, issuer);
 }
 
@@ -61,7 +60,9 @@ export async function buildUnsignedPayment(params: {
     const recipientAccount = await server.loadAccount(params.recipientAddress);
     const hasTrustline = recipientAccount.balances.some(
       (balance) =>
-        balance.asset_code === usdc.getCode() && balance.asset_issuer === usdc.getIssuer(),
+        'asset_code' in balance &&
+        balance.asset_code === usdc.getCode() &&
+        balance.asset_issuer === usdc.getIssuer(),
     );
     if (!hasTrustline) {
       throw new AppError('CONFLICT', 'Recipient has no trustline for the configured asset', 409);
@@ -88,11 +89,13 @@ export async function buildUnsignedPayment(params: {
   }
 
   txBuilder = txBuilder
-    .addOperation(Operation.payment({
-      destination: params.recipientAddress,
-      asset: usdc,
-      amount,
-    }))
+    .addOperation(
+      Operation.payment({
+        destination: params.recipientAddress,
+        asset: usdc,
+        amount,
+      }),
+    )
     .setTimeout(30);
 
   const tx = txBuilder.build();
@@ -129,14 +132,22 @@ export async function submitSignedPayment(params: {
     }
   });
   if (!hasValidSignature) {
-    throw new AppError('UNAUTHORIZED', 'Transaction signature does not match the payment sender', 401);
+    throw new AppError(
+      'UNAUTHORIZED',
+      'Transaction signature does not match the payment sender',
+      401,
+    );
   }
 
   const operations = tx.operations;
   if (operations.length !== 1 || operations[0]?.type !== 'payment') {
-    throw new AppError('INVALID_INPUT', 'Transaction must contain exactly one payment operation', 400);
+    throw new AppError(
+      'INVALID_INPUT',
+      'Transaction must contain exactly one payment operation',
+      400,
+    );
   }
-  const operation = operations[0] as typeof operations[number] & {
+  const operation = operations[0] as (typeof operations)[number] & {
     destination?: string;
     amount?: string;
     asset?: Asset;
@@ -153,7 +164,11 @@ export async function submitSignedPayment(params: {
     assetCode !== configured.getCode() ||
     assetIssuer !== configured.getIssuer()
   ) {
-    throw new AppError('INVALID_INPUT', 'Signed transaction does not match the payment intent', 400);
+    throw new AppError(
+      'INVALID_INPUT',
+      'Signed transaction does not match the payment intent',
+      400,
+    );
   }
 
   const result = await getServer().submitTransaction(tx);

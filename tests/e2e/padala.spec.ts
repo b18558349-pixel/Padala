@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Padala — Pay by Username', () => {
   test('01 - landing page loads with hero text', async ({ page }) => {
@@ -31,7 +31,9 @@ test.describe('Padala — Pay by Username', () => {
     await page.fill('#fed-input', 'notvalid');
     await page.getByRole('button', { name: /Resolve/i }).click();
     // Error div shows "Enter a federation address like supplier*padala.ph"
-    await expect(page.locator('.text-red-600', { hasText: 'federation address' })).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('.text-red-600', { hasText: 'federation address' })).toBeVisible({
+      timeout: 5000,
+    });
   });
 
   test('06 - send payment flow - resolve then send', async ({ page }) => {
@@ -116,43 +118,83 @@ test.describe('Screenshots', () => {
     // 01 - Landing
     await page.setViewportSize({ width: 1280, height: 800 });
     await goto('/');
-    await page.screenshot({ path: 'screen-shot/01-landing.jpg', type: 'jpeg', quality: 85, fullPage: false });
+    await page.screenshot({
+      path: 'screen-shot/01-landing.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: false,
+    });
 
     // 02 - Send form with resolve
     await page.fill('#fed-input', 'supplier*padala.ph');
     await page.getByRole('button', { name: /Resolve/i }).click();
     await page.waitForSelector('text=Address resolved via SEP-2', { timeout: 10000 });
-    await page.screenshot({ path: 'screen-shot/02-resolve.jpg', type: 'jpeg', quality: 85, fullPage: false });
+    await page.screenshot({
+      path: 'screen-shot/02-resolve.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: false,
+    });
 
     // 03 - Amount + memo filled
     await page.fill('#amount-input', '50');
     await page.fill('#memo-input', 'Rice & noodles bulk order');
-    await page.screenshot({ path: 'screen-shot/03-form-filled.jpg', type: 'jpeg', quality: 85, fullPage: false });
+    await page.screenshot({
+      path: 'screen-shot/03-form-filled.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: false,
+    });
 
     // 04 - Payment success
     await page.getByRole('button', { name: /Send USDC/i }).click();
     await page.waitForSelector('text=Payment sent!', { timeout: 15000 });
-    await page.screenshot({ path: 'screen-shot/04-payment-success.jpg', type: 'jpeg', quality: 85, fullPage: false });
+    await page.screenshot({
+      path: 'screen-shot/04-payment-success.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: false,
+    });
 
     // 05 - Live feed updated
     await page.waitForTimeout(2000);
-    await page.screenshot({ path: 'screen-shot/05-live-feed.jpg', type: 'jpeg', quality: 85, fullPage: false });
+    await page.screenshot({
+      path: 'screen-shot/05-live-feed.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: false,
+    });
 
     // 06 - Mobile view 375px
     await page.setViewportSize({ width: 375, height: 812 });
     await goto('/');
-    await page.screenshot({ path: 'screen-shot/06-mobile.jpg', type: 'jpeg', quality: 85, fullPage: false });
+    await page.screenshot({
+      path: 'screen-shot/06-mobile.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: false,
+    });
 
     // 07 - Full page desktop
     await page.setViewportSize({ width: 1280, height: 800 });
     await goto('/');
-    await page.screenshot({ path: 'screen-shot/07-full-page.jpg', type: 'jpeg', quality: 85, fullPage: true });
+    await page.screenshot({
+      path: 'screen-shot/07-full-page.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: true,
+    });
 
     // 08 - Quick select + amount
     await page.fill('#fed-input', 'alice*padala.ph');
     await page.getByRole('button', { name: /Resolve/i }).click();
     await page.waitForSelector('text=Address resolved via SEP-2', { timeout: 10000 });
     await page.getByRole('button', { name: '$10' }).click();
-    await page.screenshot({ path: 'screen-shot/08-quick-select.jpg', type: 'jpeg', quality: 85, fullPage: false });
+    await page.screenshot({
+      path: 'screen-shot/08-quick-select.jpg',
+      type: 'jpeg',
+      quality: 85,
+      fullPage: false,
+    });
   });
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock DB
 vi.mock('../../../src/server/db/client', () => ({
@@ -15,8 +15,12 @@ vi.mock('../../../src/server/db/client', () => ({
 }));
 
 import { db } from '../../../src/server/db/client';
-import { createPayment, confirmPayment, failPayment } from '../../../src/server/service/payment.service';
 import { AppError } from '../../../src/server/lib/http';
+import {
+  confirmPayment,
+  createPayment,
+  failPayment,
+} from '../../../src/server/service/payment.service';
 
 const mockDb = db as unknown as {
   insert: ReturnType<typeof vi.fn>;
@@ -44,7 +48,10 @@ describe('createPayment', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('creates a payment successfully', async () => {
-    const insertMock = { values: vi.fn().mockReturnThis(), returning: vi.fn().mockResolvedValue([mockPayment]) };
+    const insertMock = {
+      values: vi.fn().mockReturnThis(),
+      returning: vi.fn().mockResolvedValue([mockPayment]),
+    };
     mockDb.insert.mockReturnValue(insertMock);
 
     const result = await createPayment({

@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
-import { ok, fail, fromError } from '@/server/lib/http';
-import { resolveFederation, listFederationUsers } from '@/server/service/federation.service';
+import { fromError, ok } from '@/server/lib/http';
+import { listFederationUsers, resolveFederation } from '@/server/service/federation.service';
 
 /**
  * Resolve federation address and return preview info.
@@ -14,11 +14,13 @@ export async function GET(req: NextRequest) {
     if (!address) {
       // List all users if no address provided
       const users = await listFederationUsers();
-      return ok(users.map((u) => ({
-        federationAddress: `${u.username}*${u.domain}`,
-        stellarAddress: u.stellarAddress,
-        displayName: u.displayName,
-      })));
+      return ok(
+        users.map((u) => ({
+          federationAddress: `${u.username}*${u.domain}`,
+          stellarAddress: u.stellarAddress,
+          displayName: u.displayName,
+        })),
+      );
     }
 
     const record = await resolveFederation(address);

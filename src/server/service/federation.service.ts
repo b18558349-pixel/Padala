@@ -1,6 +1,6 @@
-import { eq, and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { db } from '@/server/db/client';
-import { federationUsers, type FederationUser } from '@/server/db/schema';
+import { type FederationUser, federationUsers } from '@/server/db/schema';
 import { AppError } from '@/server/lib/http';
 
 export type FederationRecord = {
@@ -18,7 +18,11 @@ export type FederationRecord = {
 export async function resolveFederation(federationAddress: string): Promise<FederationRecord> {
   const parts = federationAddress.split('*');
   if (parts.length !== 2) {
-    throw new AppError('INVALID_INPUT', 'Invalid federation address format. Use username*domain', 400);
+    throw new AppError(
+      'INVALID_INPUT',
+      'Invalid federation address format. Use username*domain',
+      400,
+    );
   }
   const [username, domain] = parts;
   if (!username || !domain) {

@@ -1,5 +1,5 @@
-import SendForm from '@/ui/components/SendForm';
 import PaymentFeed from '@/ui/components/PaymentFeed';
+import SendForm from '@/ui/components/SendForm';
 
 export default function HomePage() {
   return (
@@ -9,7 +9,17 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                className="w-4 h-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
                 <path d="m22 2-7 20-4-9-9-4Z" />
                 <path d="M22 2 11 13" />
               </svg>
@@ -17,7 +27,9 @@ export default function HomePage() {
             <span className="font-heading font-bold text-slate-900 text-lg">Padala</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full font-medium">Testnet</span>
+            <span className="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full font-medium">
+              Testnet
+            </span>
             <span className="text-xs text-slate-500">SEP-2 Federation</span>
           </div>
         </div>
@@ -27,25 +39,30 @@ export default function HomePage() {
       <div className="max-w-6xl mx-auto px-4 pt-8 pb-4">
         <div className="text-center mb-8">
           <h1 className="font-heading text-4xl font-bold text-slate-900 mb-2">
-            Pay anyone by{' '}
-            <span className="text-purple-600">@username</span>
+            Pay anyone by <span className="text-purple-600">@username</span>
           </h1>
           <p className="text-slate-500 text-lg">
             Type a federation address · resolve to Stellar · send USDC instantly
           </p>
           <div className="flex items-center justify-center gap-4 mt-4">
             <span className="flex items-center gap-1 text-sm text-slate-600">
-              <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs flex items-center justify-center font-bold">1</span>
+              <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs flex items-center justify-center font-bold">
+                1
+              </span>
               SEP-2 Federation
             </span>
             <span className="text-slate-300">·</span>
             <span className="flex items-center gap-1 text-sm text-slate-600">
-              <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs flex items-center justify-center font-bold">2</span>
+              <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs flex items-center justify-center font-bold">
+                2
+              </span>
               Sponsored Reserves
             </span>
             <span className="text-slate-300">·</span>
             <span className="flex items-center gap-1 text-sm text-slate-600">
-              <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs flex items-center justify-center font-bold">3</span>
+              <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs flex items-center justify-center font-bold">
+                3
+              </span>
               Live Feed (SSE)
             </span>
           </div>
@@ -85,7 +102,9 @@ export default function HomePage() {
 
         {/* Demo usernames */}
         <div className="mt-6 bg-white rounded-2xl border border-slate-200 p-5">
-          <h3 className="font-heading font-semibold text-slate-900 mb-3">Available Federation Addresses (Demo)</h3>
+          <h3 className="font-heading font-semibold text-slate-900 mb-3">
+            Available Federation Addresses (Demo)
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {[
               { addr: 'alice*padala.ph', name: 'Alice Reyes' },
@@ -104,7 +123,8 @@ export default function HomePage() {
       </div>
 
       <footer className="text-center py-6 text-xs text-slate-400">
-        Padala · Built for Stellar APAC Hackathon · Testnet only · Federation server self-hosted at padala.ph (simulated)
+        Padala · Built for Stellar APAC Hackathon · Testnet only · Federation server self-hosted at
+        padala.ph (simulated)
       </footer>
     </div>
   );

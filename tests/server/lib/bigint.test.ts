@@ -1,11 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  minorFromString,
-  minorToString,
-  isMinorString,
   formatMinor,
   humanToMinor,
+  isMinorString,
+  minorFromString,
   minorToHuman,
+  minorToString,
 } from '../../../src/server/lib/bigint';
 
 describe('minorFromString', () => {

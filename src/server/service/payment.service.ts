@@ -1,8 +1,8 @@
 import { and, desc, eq, isNull } from 'drizzle-orm';
 import { db } from '@/server/db/client';
-import { payments, type Payment, type NewPayment } from '@/server/db/schema';
-import { AppError } from '@/server/lib/http';
+import { type Payment, payments } from '@/server/db/schema';
 import { minorFromString } from '@/server/lib/bigint';
+import { AppError } from '@/server/lib/http';
 
 export type CreatePaymentInput = {
   senderUsername: string;
@@ -40,7 +40,8 @@ export async function createPayment(input: CreatePaymentInput): Promise<Payment>
         existing.recipientAddress === input.recipientAddress &&
         existing.amountMinor === input.amountMinor &&
         existing.memo === (input.memo ?? null);
-      if (!sameRequest) throw new AppError('CONFLICT', 'Idempotency-Key was reused for another payment', 409);
+      if (!sameRequest)
+        throw new AppError('CONFLICT', 'Idempotency-Key was reused for another payment', 409);
       return existing;
     }
   }
@@ -150,11 +151,7 @@ export async function failPayment(id: string): Promise<Payment> {
  * Get recent payments (last 50).
  */
 export async function getRecentPayments(limit = 50): Promise<Payment[]> {
-  return db
-    .select()
-    .from(payments)
-    .orderBy(desc(payments.createdAt))
-    .limit(limit);
+  return db.select().from(payments).orderBy(desc(payments.createdAt)).limit(limit);
 }
 
 /**

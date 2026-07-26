@@ -1,6 +1,6 @@
+import { TransactionBuilder } from '@stellar/stellar-sdk';
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { TransactionBuilder } from '@stellar/stellar-sdk';
 import { created, fail, fromError } from '@/server/lib/http';
 import { submitSignedPayment } from '@/server/lib/stellar';
 import { confirmPreparedPayment, getPaymentById } from '@/server/service/payment.service';
@@ -8,10 +8,7 @@ import { confirmPreparedPayment, getPaymentById } from '@/server/service/payment
 const schema = z.object({ signedXdr: z.string().min(1).max(100_000) });
 
 /** Submit an externally signed envelope and reconcile the confirmed hash. */
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const payment = await getPaymentById(id);

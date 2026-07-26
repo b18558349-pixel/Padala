@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the DB module
 vi.mock('../../../src/server/db/client', () => ({
@@ -14,8 +14,11 @@ vi.mock('../../../src/server/db/client', () => ({
 }));
 
 import { db } from '../../../src/server/db/client';
-import { resolveFederation, listFederationUsers } from '../../../src/server/service/federation.service';
 import { AppError } from '../../../src/server/lib/http';
+import {
+  listFederationUsers,
+  resolveFederation,
+} from '../../../src/server/service/federation.service';
 
 const mockDb = db as unknown as {
   query: {
@@ -75,8 +78,28 @@ describe('listFederationUsers', () => {
 
   it('returns list of users', async () => {
     const mockUsers = [
-      { id: '1', username: 'alice', domain: 'padala.ph', stellarAddress: 'GABC', displayName: 'Alice', isActive: true, createdAt: new Date(), memo: null, memoType: null },
-      { id: '2', username: 'bob', domain: 'padala.ph', stellarAddress: 'GDEF', displayName: 'Bob', isActive: true, createdAt: new Date(), memo: null, memoType: null },
+      {
+        id: '1',
+        username: 'alice',
+        domain: 'padala.ph',
+        stellarAddress: 'GABC',
+        displayName: 'Alice',
+        isActive: true,
+        createdAt: new Date(),
+        memo: null,
+        memoType: null,
+      },
+      {
+        id: '2',
+        username: 'bob',
+        domain: 'padala.ph',
+        stellarAddress: 'GDEF',
+        displayName: 'Bob',
+        isActive: true,
+        createdAt: new Date(),
+        memo: null,
+        memoType: null,
+      },
     ];
     mockDb.query.federationUsers.findMany.mockResolvedValue(mockUsers);
 

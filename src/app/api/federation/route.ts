@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server';
-import { ok, fail, fromError } from '@/server/lib/http';
+import { fail, fromError, ok } from '@/server/lib/http';
 import { resolveFederation } from '@/server/service/federation.service';
 
 /**
@@ -19,7 +19,11 @@ export async function GET(req: NextRequest) {
     }
 
     if (type !== 'name') {
-      return fail('INVALID_INPUT', `Unsupported federation query type: ${type}. Only "name" is supported.`, 400);
+      return fail(
+        'INVALID_INPUT',
+        `Unsupported federation query type: ${type}. Only "name" is supported.`,
+        400,
+      );
     }
 
     const record = await resolveFederation(q);

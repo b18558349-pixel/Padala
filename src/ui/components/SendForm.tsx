@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { Send, Search, CheckCircle, AlertCircle, Loader2, User } from 'lucide-react';
+import { AlertCircle, CheckCircle, Loader2, Search, Send, User } from 'lucide-react';
+import { useCallback, useState } from 'react';
 
 type ResolvedRecipient = {
   federationAddress: string;
@@ -119,7 +119,9 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
         </label>
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">@</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">
+              @
+            </span>
             <input
               id="fed-input"
               type="text"
@@ -181,7 +183,9 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-sm font-semibold text-green-800">Address resolved via SEP-2</p>
-              <p className="text-xs text-green-700 font-mono mt-0.5 break-all">{resolved.stellarAddress}</p>
+              <p className="text-xs text-green-700 font-mono mt-0.5 break-all">
+                {resolved.stellarAddress}
+              </p>
             </div>
           </div>
         )}
@@ -193,7 +197,9 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
           Amount (USDC)
         </label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">$</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">
+            $
+          </span>
           <input
             id="amount-input"
             type="number"
@@ -204,7 +210,9 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
             placeholder="0.00"
             className="w-full h-11 pl-7 pr-20 rounded-xl border border-slate-300 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 text-sm font-semibold"
           />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">USDC</span>
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">
+            USDC
+          </span>
         </div>
 
         {/* Quick amounts */}
