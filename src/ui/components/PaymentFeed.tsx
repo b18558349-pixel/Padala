@@ -72,7 +72,7 @@ function PaymentCard({ entry, isNew }: { entry: FeedEntry; isNew: boolean }) {
         </div>
         <div className="text-right flex-shrink-0">
           <p className="font-bold text-slate-900 text-sm">${formatAmount(entry.amountMinor)}</p>
-          <p className="text-xs text-slate-400">USDC</p>
+          <p className="text-xs text-slate-400">XLM</p>
         </div>
       </div>
       {entry.txHash && (

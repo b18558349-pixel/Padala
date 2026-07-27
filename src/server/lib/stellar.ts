@@ -21,12 +21,6 @@ export function getNetworkPassphrase(): string {
   return Networks.TESTNET;
 }
 
-export function getUsdcAsset(): Asset {
-  const issuer =
-    env.STELLAR_NETWORK === 'public' ? env.USDC_ASSET_ISSUER_PUBLIC : env.USDC_ASSET_ISSUER_TESTNET;
-  return new Asset(env.USDC_ASSET_CODE, issuer);
-}
-
 /**
  * Check if an account exists on the Stellar network.
  */
@@ -41,7 +35,7 @@ export async function accountExists(publicKey: string): Promise<boolean> {
 }
 
 /**
- * Build an unsigned USDC payment. The server reads sequence/fee data but
+ * Build an unsigned native XLM payment. The server reads sequence/fee data but
  * never receives a secret key, signs, or submits the transaction.
  */
 export async function buildUnsignedPayment(params: {
@@ -53,26 +47,8 @@ export async function buildUnsignedPayment(params: {
   const server = getServer();
   const senderAccount = await server.loadAccount(params.senderAddress);
 
-  const usdc = getUsdcAsset();
   const networkPassphrase = getNetworkPassphrase();
-
-  try {
-    const recipientAccount = await server.loadAccount(params.recipientAddress);
-    const hasTrustline = recipientAccount.balances.some(
-      (balance) =>
-        'asset_code' in balance &&
-        balance.asset_code === usdc.getCode() &&
-        balance.asset_issuer === usdc.getIssuer(),
-    );
-    if (!hasTrustline) {
-      throw new AppError('CONFLICT', 'Recipient has no trustline for the configured asset', 409);
-    }
-  } catch (err) {
-    if (err instanceof AppError) throw err;
-    throw new AppError('CONFLICT', 'Recipient account or trustline is not ready', 409);
-  }
-
-  // Stellar classic assets, including USDC, use seven decimal places.
+  // Native XLM also uses seven decimal places on Stellar.
   const amountBig = BigInt(params.amountMinor);
   const divisor = BigInt(10_000_000);
   const whole = amountBig / divisor;
@@ -92,7 +68,7 @@ export async function buildUnsignedPayment(params: {
     .addOperation(
       Operation.payment({
         destination: params.recipientAddress,
-        asset: usdc,
+        asset: Asset.native(),
         amount,
       }),
     )
@@ -155,18 +131,14 @@ export async function submitSignedPayment(params: {
   const expectedAmountBig = BigInt(params.amountMinor);
   const expectedAmount = `${expectedAmountBig / 10_000_000n}.${(expectedAmountBig % 10_000_000n).toString().padStart(7, '0')}`;
   const asset = operation.asset;
-  const assetCode = asset?.getCode?.();
-  const assetIssuer = asset?.getIssuer?.();
-  const configured = getUsdcAsset();
   if (
     operation.destination !== params.recipientAddress ||
     operation.amount !== expectedAmount ||
-    assetCode !== configured.getCode() ||
-    assetIssuer !== configured.getIssuer()
+    !asset?.isNative?.()
   ) {
     throw new AppError(
       'INVALID_INPUT',
-      'Signed transaction does not match the payment intent',
+      'Signed transaction must be a native XLM payment matching the intent',
       400,
     );
   }

@@ -10,7 +10,7 @@ test.describe('Padala — Pay by Username', () => {
     await page.goto('/');
     await expect(page.locator('nav').getByText('Padala')).toBeVisible();
     // nav badge with exact text
-    await expect(page.locator('nav span', { hasText: 'Testnet' }).first()).toBeVisible();
+    await expect(page.locator('nav span', { hasText: 'Mainnet-ready' }).first()).toBeVisible();
   });
 
   test('03 - send form is visible with federation input', async ({ page }) => {
@@ -42,13 +42,13 @@ test.describe('Padala — Pay by Username', () => {
     await page.getByRole('button', { name: /Resolve/i }).click();
     await expect(page.getByText('Address resolved via SEP-2')).toBeVisible({ timeout: 10000 });
     await page.fill('#amount-input', '5');
-    await page.getByRole('button', { name: /Send USDC/i }).click();
+    await page.getByRole('button', { name: /Send XLM/i }).click();
     await expect(page.getByText('Payment sent!')).toBeVisible({ timeout: 15000 });
   });
 
   test('07 - quick amount buttons work', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: '$10' }).click();
+    await page.getByRole('button', { name: '10 XLM' }).click();
     await expect(page.locator('#amount-input')).toHaveValue('10');
   });
 
@@ -66,14 +66,14 @@ test.describe('Padala — Pay by Username', () => {
 
   test('10 - federation addresses table shown', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByText('Available Federation Addresses (Demo)')).toBeVisible();
+    await expect(page.getByText('Available Federation Addresses')).toBeVisible();
     // address table uses font-mono text
     await expect(page.locator('.font-mono', { hasText: 'alice*padala.ph' }).first()).toBeVisible();
   });
 
   test('11 - send button disabled without resolve', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('button', { name: /Send USDC/i })).toBeDisabled();
+    await expect(page.getByRole('button', { name: /Send XLM/i })).toBeDisabled();
   });
 
   test('12 - mobile layout at 375px', async ({ page }) => {
@@ -147,7 +147,7 @@ test.describe('Screenshots', () => {
     });
 
     // 04 - Payment success
-    await page.getByRole('button', { name: /Send USDC/i }).click();
+    await page.getByRole('button', { name: /Send XLM/i }).click();
     await page.waitForSelector('text=Payment sent!', { timeout: 15000 });
     await page.screenshot({
       path: 'screen-shot/04-payment-success.jpg',

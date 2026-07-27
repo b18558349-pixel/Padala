@@ -30,7 +30,7 @@ describe('SendForm', () => {
 
   it('shows the send button as disabled initially', () => {
     render(<SendForm />);
-    const sendBtn = screen.getByRole('button', { name: /Send USDC/i });
+    const sendBtn = screen.getByRole('button', { name: /Send XLM/i });
     expect(sendBtn).toBeDisabled();
   });
 
@@ -58,9 +58,9 @@ describe('SendForm', () => {
     expect(buttons.length).toBeGreaterThan(0);
   });
 
-  it('shows quick amount $5 button', () => {
+  it('shows quick amount 5 XLM button', () => {
     render(<SendForm />);
-    expect(screen.getByRole('button', { name: '$5' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: '5 XLM' })).toBeTruthy();
   });
 
   it('shows memo input', () => {

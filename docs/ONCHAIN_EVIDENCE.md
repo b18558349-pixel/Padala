@@ -2,13 +2,13 @@
 
 ## Current status
 
-No mainnet deployment or mainnet transaction is claimed yet. The app currently supports a testnet/demo presentation and a signer-safe transaction boundary.
+The app supports a signer-safe native XLM transaction boundary. Record a public mainnet transaction here only after a user has reviewed and signed it.
 
 ## Evidence checklist
 
 - [ ] Production federation domain and SEP-2 response
 - [ ] Public Stellar network configuration
-- [ ] Public USDC issuer and recipient trustline
+- [ ] Sender and recipient funded with native XLM
 - [ ] External wallet signing flow
 - [ ] Prepared transaction digest
 - [ ] Confirmed Horizon transaction hash

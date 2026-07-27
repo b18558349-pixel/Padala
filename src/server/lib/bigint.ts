@@ -45,7 +45,7 @@ export function formatMinor(
   return `${negative ? '-' : ''}${symbol}${formatted}`;
 }
 
-/** Convert a human amount string like "5.5" to Stellar USDC stroops "55000000" */
+/** Convert a human amount string like "5.5" to Stellar seven-decimal units "55000000" */
 export function humanToMinor(human: string, decimals = 7): string {
   const parts = human.trim().split('.');
   const whole = parts[0] ?? '0';

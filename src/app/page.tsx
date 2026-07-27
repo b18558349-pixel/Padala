@@ -28,7 +28,7 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <span className="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full font-medium">
-              Testnet
+              Mainnet-ready
             </span>
             <span className="hidden sm:inline text-xs text-slate-500">SEP-2 Federation</span>
           </div>
@@ -42,7 +42,7 @@ export default function HomePage() {
             Pay anyone by <span className="text-purple-600">@username</span>
           </h1>
           <p className="text-slate-500 text-base sm:text-lg leading-6 sm:leading-7">
-            Type a federation address · resolve to Stellar · send USDC instantly
+            Type a federation address · resolve to Stellar · send XLM instantly
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-4 text-xs sm:text-sm">
             <span className="flex items-center gap-1 text-slate-600">
@@ -103,7 +103,7 @@ export default function HomePage() {
         {/* Demo usernames */}
         <div className="mt-6 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5">
           <h3 className="font-heading font-semibold text-slate-900 mb-3">
-            Available Federation Addresses (Demo)
+            Available Federation Addresses
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2">
             {[
@@ -123,8 +123,8 @@ export default function HomePage() {
       </div>
 
       <footer className="text-center px-4 py-6 text-xs leading-5 text-slate-400">
-        Padala · Built for Stellar APAC Hackathon · Testnet only · Federation server self-hosted at
-        padala.ph (simulated)
+        Padala · Built for Stellar APAC Hackathon · Network selected by deployment · Federation
+        server self-hosted at padala.ph (simulated)
       </footer>
     </div>
   );

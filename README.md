@@ -2,11 +2,11 @@
 
 ## Pay anyone by `@username` with Stellar
 
-Padala turns a human-friendly federation address such as `supplier*padala.ph` into a verified Stellar destination. The product is designed for remittances and everyday USDC payments where copying a long public key is the biggest source of mistakes.
+Padala turns a human-friendly federation address such as `supplier*padala.ph` into a verified Stellar destination. The product is designed for remittances and everyday XLM payments where copying a long public key is the biggest source of mistakes.
 
 ![Padala landing screen](screen-shot/01-landing.png)
 
-> Current mode: testnet/demo. The UI now supports a real, user-approved Freighter payment on the configured network; this repository does not claim a live mainnet deployment yet.
+> Current mode: the UI supports a real, user-approved Freighter payment on the configured network. The Vercel deployment uses a lightweight demo store; production persistence requires PostgreSQL.
 
 ## Why it exists
 
@@ -16,20 +16,20 @@ Stellar addresses are safe but difficult to share and verify. Padala gives the s
 
 1. Enter a federation address such as `alice*padala.ph`.
 2. Resolve it through the SEP-2-compatible federation service.
-3. Review the destination and enter a USDC amount and optional memo.
+3. Review the destination and enter an XLM amount and optional memo.
 4. The server builds an unsigned transaction and returns its digest.
 5. Freighter signs the envelope in the browser; the server verifies the signed transaction before submission.
 6. The payment feed records confirmed results for the product UI.
 
-For the end-to-end testnet path, follow [`docs/TESTNET_PAYMENT_RUNBOOK.md`](docs/TESTNET_PAYMENT_RUNBOOK.md). The demo data and simulation route are useful for UI previews only; they are not on-chain evidence.
+For the end-to-end signer path, follow [`docs/TESTNET_PAYMENT_RUNBOOK.md`](docs/TESTNET_PAYMENT_RUNBOOK.md). The demo data and simulation route are useful for UI previews only; they are not on-chain evidence.
 
 ![Padala payment form](screen-shot/02-form-filled.png)
 
 ## What makes it real
 
 - SEP-2-style username resolution is backed by active federation records.
-- Classic Stellar USDC uses seven-decimal stroops: `1 USDC = 10,000,000`.
-- The configured Stellar network and USDC issuer are bound to server configuration.
+- Native XLM uses seven-decimal stroops: `1 XLM = 10,000,000`.
+- The configured Stellar network and passphrase are bound to server configuration.
 - The server never receives or stores a wallet secret key.
 - Normal payment flow is `prepare → external sign → confirm`, with exact intent matching.
 - Horizon is the source of truth for account state and confirmed transaction results.
@@ -40,7 +40,7 @@ For the end-to-end testnet path, follow [`docs/TESTNET_PAYMENT_RUNBOOK.md`](docs
 | Surface | Implementation |
 |---|---|
 | Username routing | Federation lookup for `username*domain` |
-| Asset | Configured issued USDC asset, seven decimal places |
+| Asset | Native XLM, seven decimal places |
 | Transaction | Classic Stellar payment with optional text memo |
 | Signing | External wallet boundary; no private-key custody |
 | Verification | Source, signature, operation, destination, amount, asset, and network checks |
@@ -97,9 +97,9 @@ npm run build  # production build passing
 
 ## Mainnet readiness
 
-This project is not claiming mainnet readiness yet. Before a live launch, complete the gates in [`docs/MAINNET_READINESS.md`](docs/MAINNET_READINESS.md) and record reproducible public evidence in [`docs/ONCHAIN_EVIDENCE.md`](docs/ONCHAIN_EVIDENCE.md).
+Before calling the app production-ready, complete the gates in [`docs/MAINNET_READINESS.md`](docs/MAINNET_READINESS.md) and record reproducible public evidence in [`docs/ONCHAIN_EVIDENCE.md`](docs/ONCHAIN_EVIDENCE.md).
 
-Mainnet requires a real federation domain, production database, configured public USDC issuer, external wallet signer, recipient trustline checks, idempotent payment intents, Horizon reconciliation, and public transaction links.
+Mainnet requires a real federation domain, production database, external wallet signer, idempotent payment intents, Horizon reconciliation, and public transaction links.
 
 ## Hackathon scope
 

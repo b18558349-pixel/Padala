@@ -245,7 +245,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
       {/* Amount */}
       <div className="flex flex-col gap-2">
         <label className="text-sm font-semibold text-slate-700" htmlFor="amount-input">
-          Amount (USDC)
+          Amount (XLM)
         </label>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">
@@ -262,7 +262,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
             className="w-full h-11 pl-7 pr-20 rounded-xl border border-slate-300 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 text-sm font-semibold"
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">
-            USDC
+            XLM
           </span>
         </div>
 
@@ -275,7 +275,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
               onClick={() => setAmount(v)}
               className="flex-1 h-8 text-xs font-semibold bg-slate-100 hover:bg-purple-100 text-slate-600 hover:text-purple-700 rounded-lg border border-slate-200 hover:border-purple-300 transition-colors"
             >
-              ${v}
+              {v} XLM
             </button>
           ))}
         </div>
@@ -333,13 +333,13 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
         ) : (
           <>
             <Send className="w-5 h-5" />
-            Send USDC
+            Send XLM
           </>
         )}
       </button>
 
       <p className="text-xs leading-5 text-slate-400 text-center">
-        Powered by Stellar SEP-2 federation · Testnet
+        Powered by Stellar SEP-2 federation · Mainnet
       </p>
     </div>
   );

@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Padala — Pay anyone by @username',
-  description: 'Send USDC to anyone using their @username via SEP-2 federation on Stellar.',
+  description: 'Send XLM to anyone using their @username via SEP-2 federation on Stellar.',
 };
 
 export const viewport: Viewport = {
