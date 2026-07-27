@@ -3,6 +3,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const {
   Address,
+  nativeToScVal,
   Networks,
   Operation,
   TransactionBuilder,
@@ -34,8 +35,8 @@ function outputPath(stage, network) {
 
 async function main() {
   const stage = option('stage');
-  if (!['upload', 'deploy', 'initialize'].includes(stage)) {
-    throw new Error('Usage: npm run contract:assemble -- --stage upload|deploy|initialize [--network mainnet|testnet] [--contract-id C...]');
+  if (!['upload', 'deploy', 'initialize', 'register-demo'].includes(stage)) {
+    throw new Error('Usage: npm run contract:assemble -- --stage upload|deploy|initialize|register-demo [--network mainnet|testnet] [--contract-id C...]');
   }
   const network = option('network', 'mainnet');
   const settings = config();
@@ -51,13 +52,22 @@ async function main() {
       wasmHash: Buffer.from(WASM_HASH, 'hex'),
       salt: SALT,
     }));
-  } else {
+  } else if (stage === 'initialize') {
     const contractId = option('contract-id');
     if (!contractId) throw new Error('--contract-id C... is required for initialize');
     builder.addOperation(Operation.invokeContractFunction({
       contract: contractId,
       function: 'initialize',
       args: [Address.fromString(SOURCE).toScVal()],
+    }));
+  } else {
+    const contractId = option('contract-id');
+    if (!contractId) throw new Error('--contract-id C... is required for register-demo');
+    const username = option('username', 'demo-016');
+    builder.addOperation(Operation.invokeContractFunction({
+      contract: contractId,
+      function: 'register_username',
+      args: [nativeToScVal(username), Address.fromString(SOURCE).toScVal()],
     }));
   }
 

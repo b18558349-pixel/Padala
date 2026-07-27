@@ -19,6 +19,11 @@
         "stage": "deploy",
         "hash": "87a07fb6acbebe41b21f4279d833abd597f3595b5eb344913c43e1328f7a4a33",
         "url": "https://stellarchain.io/transactions/87a07fb6acbebe41b21f4279d833abd597f3595b5eb344913c43e1328f7a4a33"
+      },
+      {
+        "stage": "initialize",
+        "hash": "5593b177eff2dc71d243c1320a410d57c3a14cf644872e4c31d8fb1421db1519",
+        "url": "https://stellarchain.io/transactions/5593b177eff2dc71d243c1320a410d57c3a14cf644872e4c31d8fb1421db1519"
       }
     ]
   }
