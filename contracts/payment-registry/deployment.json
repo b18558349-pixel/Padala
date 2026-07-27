@@ -24,6 +24,12 @@
         "stage": "initialize",
         "hash": "5593b177eff2dc71d243c1320a410d57c3a14cf644872e4c31d8fb1421db1519",
         "url": "https://stellarchain.io/transactions/5593b177eff2dc71d243c1320a410d57c3a14cf644872e4c31d8fb1421db1519"
+      },
+      {
+        "stage": "register-demo",
+        "username": "demo-016",
+        "hash": "ac4a87d4a82f167ace64dd21d4d3dbe1f5b8deafe1050203127197585b4b524b",
+        "url": "https://stellarchain.io/transactions/ac4a87d4a82f167ace64dd21d4d3dbe1f5b8deafe1050203127197585b4b524b"
       }
     ]
   }
