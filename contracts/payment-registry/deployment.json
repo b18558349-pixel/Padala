@@ -1,0 +1,9 @@
+{
+  "projectId": "016",
+  "contractName": "padala-payment-registry-contract",
+  "sdkVersion": "27.0.2",
+  "wasmPath": "contracts/payment-registry/target/wasm32v1-none/release/padala_payment_registry_contract.wasm",
+  "wasmSha256": "eb0f296803cfb8040b27b29d4f02ac8dd008a7a2f457a11c1eed3adcaced32f9",
+  "testnet": { "status": "not-deployed", "contractId": null, "transactions": [] },
+  "mainnet": { "status": "not-deployed", "contractId": null, "transactions": [] }
+}

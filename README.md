@@ -103,6 +103,17 @@ Mainnet requires a real federation domain, production database, external wallet 
 
 Mainnet smoke transaction: [`0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641`](https://stellar.expert/explorer/public/tx/0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641).
 
-## Hackathon scope
+## Soroban contract
 
-Track concept: payments and remittances on Stellar. The current slice focuses on username-based routing and safe classic Stellar payment preparation. Soroban contracts and wallet automation are deliberately not invented for this project; they can be added only if the product scope requires them.
+The repository includes an independent Soroban `payment-registry` contract for the hackathon technical requirement. It stores username-to-account records and on-chain payment receipts; the existing classic XLM payment remains the settlement flow.
+
+- Source: [`contracts/payment-registry/src/lib.rs`](contracts/payment-registry/src/lib.rs)
+- WASM SHA-256: `eb0f296803cfb8040b27b29d4f02ac8dd008a7a2f457a11c1eed3adcaced32f9`
+- Deployment metadata and unsigned-XDR workflow: [`contracts/payment-registry/`](contracts/payment-registry/)
+
+Build and test locally:
+
+```bash
+cargo test --offline --manifest-path contracts/payment-registry/Cargo.toml
+rustup run stable cargo build --manifest-path contracts/payment-registry/Cargo.toml --target wasm32v1-none --release
+```
