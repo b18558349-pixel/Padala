@@ -12,3 +12,5 @@ rustup run stable cargo build --manifest-path contracts/payment-registry/Cargo.t
 
 Deploy and initialize through the unsigned XDR runbook. Never put a private key
 in the repository or environment.
+
+The current deployment operator is `GCY6FFLRRQXWRRZLF3PR35KY5IGBKMDBDASKLYOGQGRN2XCXQ2EGNUQX`.
