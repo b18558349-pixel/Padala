@@ -108,7 +108,13 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
       const confirmRes = await fetch(`/api/payments/${preparedJson.data.payment.id}/confirm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ signedXdr: signed.signedTxXdr }),
+        body: JSON.stringify({
+          signedXdr: signed.signedTxXdr,
+          unsignedXdr: preparedJson.data.unsignedXdr,
+          senderAddress: walletAddress,
+          recipientAddress: preparedJson.data.recipientAddress,
+          amountMinor: preparedJson.data.payment.amountMinor,
+        }),
       });
       const json = await confirmRes.json();
       if (!json.ok) throw new Error(json.error?.message ?? 'Payment confirmation failed');
