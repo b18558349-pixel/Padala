@@ -6,5 +6,15 @@
   "wasmPath": "contracts/payment-registry/target/wasm32v1-none/release/padala_payment_registry_contract.wasm",
   "wasmSha256": "eb0f296803cfb8040b27b29d4f02ac8dd008a7a2f457a11c1eed3adcaced32f9",
   "testnet": { "status": "not-deployed", "contractId": null, "transactions": [] },
-  "mainnet": { "status": "not-deployed", "contractId": null, "transactions": [] }
+  "mainnet": {
+    "status": "wasm-uploaded",
+    "contractId": null,
+    "transactions": [
+      {
+        "stage": "upload",
+        "hash": "92b28cf6b62952be72beaff23bb87ecbaccd2f2993a7e4f5cd1097dfcb2ff9b7",
+        "url": "https://stellarchain.io/transactions/92b28cf6b62952be72beaff23bb87ecbaccd2f2993a7e4f5cd1097dfcb2ff9b7"
+      }
+    ]
+  }
 }
