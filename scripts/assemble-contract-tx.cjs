@@ -9,7 +9,7 @@ const {
   rpc,
 } = require('@stellar/stellar-sdk');
 
-const SOURCE = 'GBJG7U6FCJZTS4RNXDRULTJUBZP7FZCSSOVBWM6MIFJA6WT25JMCKDSQ';
+const SOURCE = 'GCY6FFLRRQXWRRZLF3PR35KY5IGBKMDBDASKLYOGQGRN2XCXQ2EGNUQX';
 const ROOT = path.resolve(__dirname, '..');
 const WASM_PATH = path.resolve(ROOT, 'contracts/payment-registry/target/wasm32v1-none/release/padala_payment_registry_contract.wasm');
 const WASM_HASH = 'eb0f296803cfb8040b27b29d4f02ac8dd008a7a2f457a11c1eed3adcaced32f9';
