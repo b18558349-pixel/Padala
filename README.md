@@ -101,6 +101,8 @@ Before calling the app production-ready, complete the gates in [`docs/MAINNET_RE
 
 Mainnet requires a real federation domain, production database, external wallet signer, idempotent payment intents, Horizon reconciliation, and public transaction links.
 
+Mainnet smoke transaction: [`0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641`](https://stellar.expert/explorer/public/tx/0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641).
+
 ## Hackathon scope
 
 Track concept: payments and remittances on Stellar. The current slice focuses on username-based routing and safe classic Stellar payment preparation. Soroban contracts and wallet automation are deliberately not invented for this project; they can be added only if the product scope requires them.

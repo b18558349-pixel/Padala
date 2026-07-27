@@ -6,4 +6,4 @@ Current evidence: the demo path remains explicitly gated, while the safe slice n
 
 Required gates: confirm SEP-2 domain and account ownership, migrate `unsigned_xdr`/`unsigned_tx_digest`, test external signing without custody, add full idempotency/reconciliation, and record funded mainnet transaction links.
 
-Status: **signer-ready; persistence and public evidence remain**. `scripts/seed-demo.ts` is explicitly blocked on public network unless `DEMO_MODE=true`.
+Status: **functional mainnet smoke flow complete; persistence remains**. `scripts/seed-demo.ts` is explicitly blocked on public network unless `DEMO_MODE=true`.
