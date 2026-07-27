@@ -1,5 +1,6 @@
 'use client';
 
+import { getNetworkDetails, requestAccess, signTransaction } from '@stellar/freighter-api';
 import { AlertCircle, CheckCircle, Loader2, Search, Send, User } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
@@ -33,6 +34,24 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState<PaymentResult | null>(null);
   const [error, setError] = useState('');
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [connecting, setConnecting] = useState(false);
+
+  const handleConnect = useCallback(async () => {
+    setConnecting(true);
+    setError('');
+    try {
+      const access = await requestAccess();
+      if (access.error || !access.address) {
+        throw new Error(access.error?.message ?? 'Freighter access was not granted');
+      }
+      setWalletAddress(access.address);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not connect Freighter');
+    } finally {
+      setConnecting(false);
+    }
+  }, []);
 
   const handleResolve = useCallback(async () => {
     if (!federationInput.includes('*')) {
@@ -55,28 +74,48 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
   }, [federationInput]);
 
   const handleSend = useCallback(async () => {
-    if (!resolved || !amount) return;
+    if (!resolved || !amount || !walletAddress) return;
     setSending(true);
     setError('');
     setSuccess(null);
     try {
-      const res = await fetch('/api/payments', {
+      const idempotencyKey = `padala-${crypto.randomUUID()}`;
+      const prepareRes = await fetch('/api/payments/prepare', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': idempotencyKey },
         body: JSON.stringify({
-          senderUsername: DEMO_SENDER.username,
-          senderAddress: DEMO_SENDER.address,
+          senderUsername: walletAddress,
+          senderAddress: walletAddress,
           recipientFederation: federationInput,
           amount,
           memo: memo || undefined,
         }),
       });
-      const json = await res.json();
-      if (!json.ok) throw new Error(json.error?.message ?? 'Payment failed');
+      const preparedJson = await prepareRes.json();
+      if (!preparedJson.ok)
+        throw new Error(preparedJson.error?.message ?? 'Payment preparation failed');
+
+      const network =
+        preparedJson.data.networkPassphrase ?? (await getNetworkDetails()).networkPassphrase;
+      const signed = await signTransaction(preparedJson.data.unsignedXdr, {
+        address: walletAddress,
+        networkPassphrase: network,
+      });
+      if (signed.error || !signed.signedTxXdr) {
+        throw new Error(signed.error?.message ?? 'Freighter did not return a signed transaction');
+      }
+
+      const confirmRes = await fetch(`/api/payments/${preparedJson.data.payment.id}/confirm`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signedXdr: signed.signedTxXdr }),
+      });
+      const json = await confirmRes.json();
+      if (!json.ok) throw new Error(json.error?.message ?? 'Payment confirmation failed');
       const result: PaymentResult = {
         txHash: json.data.txHash,
-        isNewAccount: json.data.isNewAccount,
-        recipientAddress: json.data.recipientAddress,
+        isNewAccount: false,
+        recipientAddress: preparedJson.data.recipientAddress,
       };
       setSuccess(result);
       onPaymentSent?.({ ...result, recipientFederation: federationInput, amount });
@@ -90,7 +129,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
     } finally {
       setSending(false);
     }
-  }, [resolved, amount, federationInput, memo, onPaymentSent]);
+  }, [resolved, amount, federationInput, memo, walletAddress, onPaymentSent]);
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
@@ -112,8 +151,16 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
         <User className="w-4 h-4 text-purple-600" />
         <span className="text-sm text-slate-700">Sending as</span>
         <span className="text-sm font-semibold text-purple-700 min-w-0 truncate">
-          {DEMO_SENDER.username}
+          {walletAddress ?? DEMO_SENDER.username}
         </span>
+        <button
+          type="button"
+          onClick={handleConnect}
+          disabled={connecting}
+          className="ml-auto h-8 px-3 rounded-lg bg-purple-600 text-white text-xs font-semibold hover:bg-purple-700 disabled:bg-purple-300"
+        >
+          {connecting ? 'Connecting…' : walletAddress ? 'Connected' : 'Connect Freighter'}
+        </button>
       </div>
 
       {/* Federation address input */}
@@ -278,7 +325,7 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
       <button
         type="button"
         onClick={handleSend}
-        disabled={!resolved || !amount || sending}
+        disabled={!resolved || !amount || !walletAddress || sending}
         className="h-12 w-full bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-colors shadow-sm"
       >
         {sending ? (

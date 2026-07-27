@@ -6,7 +6,7 @@ Padala turns a human-friendly federation address such as `supplier*padala.ph` in
 
 ![Padala landing screen](screen-shot/01-landing.png)
 
-> Current mode: testnet/demo. Wallet signing and mainnet evidence are intentionally kept as a later gate; this repository does not claim a live mainnet deployment yet.
+> Current mode: testnet/demo. The UI now supports a real, user-approved Freighter payment on the configured network; this repository does not claim a live mainnet deployment yet.
 
 ## Why it exists
 
@@ -17,9 +17,11 @@ Stellar addresses are safe but difficult to share and verify. Padala gives the s
 1. Enter a federation address such as `alice*padala.ph`.
 2. Resolve it through the SEP-2-compatible federation service.
 3. Review the destination and enter a USDC amount and optional memo.
-4. In normal mode, the server builds an unsigned transaction and returns its digest.
-5. An external wallet signs the envelope; the server verifies the signed transaction before submission.
+4. The server builds an unsigned transaction and returns its digest.
+5. Freighter signs the envelope in the browser; the server verifies the signed transaction before submission.
 6. The payment feed records confirmed results for the product UI.
+
+For the end-to-end testnet path, follow [`docs/TESTNET_PAYMENT_RUNBOOK.md`](docs/TESTNET_PAYMENT_RUNBOOK.md). The demo data and simulation route are useful for UI previews only; they are not on-chain evidence.
 
 ![Padala payment form](screen-shot/02-form-filled.png)
 
