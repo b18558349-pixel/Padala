@@ -84,6 +84,13 @@ npm run dev
 
 Open `http://localhost:3003`.
 
+For the Vercel production build, `SESSION_SECRET` must be configured as an
+encrypted Production environment variable. The verified deployment has it set;
+local builds can use a temporary non-committed value such as
+`SESSION_SECRET=local-build-secret npm run build`.
+
+Verified Vercel deployment: https://padala-016-knj7sfo6y-b18558349-1360s-projects.vercel.app
+
 Required environment values are documented in [`.env.example`](.env.example). Never commit `.env`, `.env.local`, seed phrases, private keys, or provider credentials.
 
 ## Verification
