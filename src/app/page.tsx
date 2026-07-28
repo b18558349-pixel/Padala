@@ -1,7 +1,13 @@
+'use client';
+
+import { useState } from 'react';
+import ContractRegistryCard from '@/ui/components/ContractRegistryCard';
 import PaymentFeed from '@/ui/components/PaymentFeed';
 import SendForm from '@/ui/components/SendForm';
 
 export default function HomePage() {
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50">
       {/* Top nav */}
@@ -72,13 +78,17 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Left panel: Send form */}
           <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm">
-            <SendForm />
+            <SendForm onWalletConnected={setWalletAddress} />
           </div>
 
           {/* Right panel: Live feed */}
           <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm lg:h-[600px]">
             <PaymentFeed />
           </div>
+        </div>
+
+        <div className="mt-6">
+          <ContractRegistryCard walletAddress={walletAddress} />
         </div>
 
         {/* SEP-2 Info */}

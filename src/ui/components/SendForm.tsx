@@ -17,6 +17,7 @@ type PaymentResult = {
 
 type SendFormProps = {
   onPaymentSent?: (result: PaymentResult & { recipientFederation: string; amount: string }) => void;
+  onWalletConnected?: (address: string) => void;
 };
 
 const DEMO_SENDER = {
@@ -24,7 +25,7 @@ const DEMO_SENDER = {
   address: 'GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37',
 };
 
-export default function SendForm({ onPaymentSent }: SendFormProps) {
+export default function SendForm({ onPaymentSent, onWalletConnected }: SendFormProps) {
   const [federationInput, setFederationInput] = useState('');
   const [amount, setAmount] = useState('');
   const [memo, setMemo] = useState('');
@@ -46,12 +47,13 @@ export default function SendForm({ onPaymentSent }: SendFormProps) {
         throw new Error(access.error?.message ?? 'Freighter access was not granted');
       }
       setWalletAddress(access.address);
+      onWalletConnected?.(access.address);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not connect Freighter');
     } finally {
       setConnecting(false);
     }
-  }, []);
+  }, [onWalletConnected]);
 
   const handleResolve = useCallback(async () => {
     if (!federationInput.includes('*')) {
