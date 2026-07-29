@@ -102,13 +102,24 @@ npm test       # 33 tests passing
 npm run build  # production build passing
 ```
 
-## Mainnet readiness
+## Mainnet deployment
 
-Before calling the app production-ready, complete the gates in [`docs/MAINNET_READINESS.md`](docs/MAINNET_READINESS.md) and record reproducible public evidence in [`docs/ONCHAIN_EVIDENCE.md`](docs/ONCHAIN_EVIDENCE.md).
+Padala has a live Soroban registry contract on Stellar Mainnet. The public app
+keeps payment signing inside Freighter and exposes the username-registration
+action used for the verified functional call.
 
-Mainnet requires a real federation domain, production database, external wallet signer, idempotent payment intents, Horizon reconciliation, and public transaction links.
+| Evidence | Value |
+|---|---|
+| Network | Stellar Mainnet |
+| Contract ID | `CDKH3WERXPN3OEJNGMYDWVLFPQ4KI4HWM2EQO7WNM3SXIUJR5P54FRRD` |
+| Functional call | `register-demo` (`demo-016`) |
+| Functional transaction | [`ac4a87d4a82f167ace64dd21d4d3dbe1f5b8deafe1050203127197585b4b524b`](https://stellar.expert/explorer/public/tx/ac4a87d4a82f167ace64dd21d4d3dbe1f5b8deafe1050203127197585b4b524b) |
+| Classic payment smoke transaction | [`0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641`](https://stellar.expert/explorer/public/tx/0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641) |
 
-Mainnet smoke transaction: [`0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641`](https://stellar.expert/explorer/public/tx/0dcf18b230565cab344925037de5ebf8ed5d1be311e2819e3791a216e81aa641).
+The complete upload, deploy, initialize, and functional transaction record is
+stored in [`contracts/payment-registry/deployment.json`](contracts/payment-registry/deployment.json).
+Operational checks remain documented in
+[`docs/MAINNET_READINESS.md`](docs/MAINNET_READINESS.md).
 
 ## Soroban contract
 
